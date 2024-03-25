@@ -1,6 +1,7 @@
 package com.group.mantel.assignment.networkmonitor;
 
 import com.group.mantel.assignment.networkmonitor.model.AddressCount;
+import com.group.mantel.assignment.networkmonitor.model.Request;
 import com.group.mantel.assignment.networkmonitor.model.UrlCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

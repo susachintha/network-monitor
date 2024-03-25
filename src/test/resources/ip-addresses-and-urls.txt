@@ -16,8 +16,9 @@
 168.41.191.43 /temp-redirect
 168.41.191.40 /docs/manage-websites/
 168.41.191.34 /faq/how-to/
-72.44.32.10 /translations/
 79.125.00.21 /newsletter/
 50.112.00.11 /hosting/
 72.44.32.10 /download/counter/
 50.112.00.11 /asset.css
+50.112.00.11 /data.html
+168.41.191.40 /docs/manage-websites/

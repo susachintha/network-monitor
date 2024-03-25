@@ -1,4 +1,4 @@
-package com.group.mantel.assignment.networkmonitor;
+package com.group.mantel.assignment.networkmonitor.model;
 
 import jakarta.persistence.*;
 import lombok.*;

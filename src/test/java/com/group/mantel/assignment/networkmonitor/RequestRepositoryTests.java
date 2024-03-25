@@ -1,15 +1,18 @@
 package com.group.mantel.assignment.networkmonitor;
 
 import com.group.mantel.assignment.networkmonitor.model.AddressCount;
+import com.group.mantel.assignment.networkmonitor.model.Request;
 import com.group.mantel.assignment.networkmonitor.model.UrlCount;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 
 @SpringBootTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class RequestRepositoryTests {
 
 	@Autowired
@@ -30,25 +33,24 @@ class RequestRepositoryTests {
 		Request request1 = new Request();
 		request1.setUrl("/");
 		request1.setAddress("192.168.1.1");
-		Request savedRequest1 = requestRepository.save(request1);
+		requestRepository.save(request1);
 
 		Request request2 = new Request();
 		request2.setUrl("/");
 		request2.setAddress("192.168.1.2");
-		Request savedRequest2 = requestRepository.save(request2);
+		requestRepository.save(request2);
 
 		Request request3 = new Request();
 		request3.setUrl("/home");
 		request3.setAddress("192.168.1.3");
-		Request savedRequest3 = requestRepository.save(request3);
+		requestRepository.save(request3);
 
 		List<String> distinctUrls = requestRepository.findDistinctUrl();
 		Assertions.assertEquals(2, distinctUrls.size());
-
 	}
 
 	@Test
-	void testFindTopUrls() {
+	void testFindMostUsedUrls() {
 
 		String topUrl1 = "/";
 		int url1Count = 4;
@@ -75,7 +77,7 @@ class RequestRepositoryTests {
 		for (int i = 0; i < url2Count; i++) {
 			Request request = new Request();
 			request.setUrl(topUrl2);
-			request.setAddress("192.168.0.30"); //dynamically generating ip address for verification
+			request.setAddress("192.168.0.30");
 			requestRepository.save(request);
 		}
 
@@ -96,13 +98,10 @@ class RequestRepositoryTests {
 		Assertions.assertEquals(url2Count, topUrls.get(1).getCount());
 		Assertions.assertEquals(topUrl3, topUrls.get(2).getUrl());
 		Assertions.assertEquals(url3Count, topUrls.get(2).getCount());
-
-
-
 	}
 
 	@Test
-	void testMostUsedIPAddresses() {
+	void testMostActiveIPAddresses() {
 		String url1 = "/";
 		int url1Count = 5;
 		for (int i = 0; i < url1Count; i++) {
@@ -144,8 +143,5 @@ class RequestRepositoryTests {
 
 		Assertions.assertEquals("192.168.1.4", mostUsedAddresses.get(2).getAddress());
 		Assertions.assertEquals(url4Count, mostUsedAddresses.get(2).getCount());
-
 	}
-
-
 }
