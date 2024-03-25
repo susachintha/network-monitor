@@ -1,8 +1,11 @@
 package com.group.mantel.assignment.networkmonitor;
 
+import com.group.mantel.assignment.networkmonitor.model.AddressCount;
+import com.group.mantel.assignment.networkmonitor.model.UrlCount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +39,17 @@ public class RequestService {
 
     public Request saveRequest(RequestRecord requestRecord) {
         Request request = new Request();
-        request.setIpAddress(requestRecord.ipAddress);
+        request.setAddress(requestRecord.ipAddress);
         request.setUrl(requestRecord.url);
         return requestRepository.save(request);
     }
+
+    List<UrlCount> findMostVisitedUrls(Long numberOfTopUrls) {
+        return requestRepository.findMostVisitedUrls(numberOfTopUrls);
+    }
+
+    List<AddressCount> findMostActiveIPAddresses(Long numberOfTopAddresses) {
+        return requestRepository.findMostActiveIPAddresses(numberOfTopAddresses);
+    }
+
 }

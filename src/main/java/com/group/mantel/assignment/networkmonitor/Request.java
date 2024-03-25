@@ -12,8 +12,7 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "ip_address")
-    private String ipAddress;
+    private String address;
     private String url;
 }
 
