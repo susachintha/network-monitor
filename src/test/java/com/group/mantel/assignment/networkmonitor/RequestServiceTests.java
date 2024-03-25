@@ -4,6 +4,8 @@ import com.group.mantel.assignment.networkmonitor.model.AddressCount;
 import com.group.mantel.assignment.networkmonitor.model.Request;
 import com.group.mantel.assignment.networkmonitor.model.UrlCount;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -20,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class RequestServiceTests {
+	private static final Logger LOG = LoggerFactory.getLogger(RequestServiceTests.class);
 
 	@Autowired
 	RequestService requestService;
@@ -57,7 +60,7 @@ class RequestServiceTests {
 			reader.close();
 			expectedReader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error("IO Exception occurred");
 		}
 	}
 
@@ -99,7 +102,7 @@ class RequestServiceTests {
 			}
 			reader.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error("IO Exception occurred");
 		}
 
 		List<AddressCount> mostUsedAddresses = requestService.findMostActiveIPAddresses(3L);
