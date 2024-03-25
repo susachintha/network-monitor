@@ -4,10 +4,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RequestService {
-    record Request(String ipAddress, String url){}
+    public record Request(String ipAddress, String url){}
 
     public Request extractRequest(String logLine) {
-        return null;
+        return new Request(extractIPAddress(logLine), extractURL(logLine));
     }
 
     public String extractIPAddress(String logLine) {
