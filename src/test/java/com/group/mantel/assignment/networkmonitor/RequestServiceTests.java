@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 @SpringBootTest
-@ContextConfiguration(classes = {RequestService.class})
 class RequestServiceTests {
 
 	@Autowired
@@ -20,13 +19,13 @@ class RequestServiceTests {
 	@Test
 	void extractRequest() {
 		String requestLog = "177.71.128.21 - - [10/Jul/2018:22:21:28 +0200] \"GET /intranet-analytics/ HTTP/1.1\" 200 3574 \"-\" \"Mozilla/5.0 (X11; U; Linux x86_64; fr-FR) AppleWebKit/534.7 (KHTML, like Gecko) Epiphany/2.30.6 Safari/534.7\"";
-		RequestService.Request request = requestService.extractRequest(requestLog);
+		RequestService.RequestRecord request = requestService.extractRequest(requestLog);
 		Assertions.assertEquals("177.71.128.21", request.ipAddress());
 		Assertions.assertEquals("/intranet-analytics/", request.url());
 	}
 
 	@Test
-	void extractRequests() {
+	void extractRequestsFromLog() {
 		BufferedReader expectedReader;
 		BufferedReader reader;
 		try {
@@ -37,7 +36,7 @@ class RequestServiceTests {
 			String expectValues = expectedReader.readLine();
 
 			while (line != null) {
-				RequestService.Request request = requestService.extractRequest(line);
+				RequestService.RequestRecord request = requestService.extractRequest(line);
 				String[] values = expectValues.split(" ");
 				Assertions.assertEquals(values[0], request.ipAddress());
 				Assertions.assertEquals(values[1], request.url());
@@ -65,6 +64,15 @@ class RequestServiceTests {
 	void testExtractURL() {
 		String url = requestService.extractURL("177.71.128.21 - - [10/Jul/2018:22:21:28 +0200] \"GET /intranet-analytics/ HTTP/1.1\" 200 3574");
 		Assertions.assertEquals("/intranet-analytics/", url);
+	}
+
+	@Test
+	void testSaveRequest() {
+		String requestLog = "177.71.128.21 - - [10/Jul/2018:22:21:28 +0200] \"GET /intranet-analytics/ HTTP/1.1\" 200 3574 \"-\" \"Mozilla/5.0 (X11; U; Linux x86_64; fr-FR) AppleWebKit/534.7 (KHTML, like Gecko) Epiphany/2.30.6 Safari/534.7\"";
+		RequestService.RequestRecord requestRecord = requestService.extractRequest(requestLog);
+		Request request = requestService.saveRequest(requestRecord);
+		Assertions.assertEquals(requestRecord.ipAddress(), request.getIpAddress());
+		Assertions.assertEquals(requestRecord.url(), request.getUrl());
 	}
 
 }

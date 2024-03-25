@@ -1,13 +1,20 @@
 package com.group.mantel.assignment.networkmonitor;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service
 public class RequestService {
-    public record Request(String ipAddress, String url){}
 
-    public Request extractRequest(String logLine) {
-        return new Request(extractIPAddress(logLine), extractURL(logLine));
+    @Autowired
+    RequestRepository requestRepository;
+    public record RequestRecord(String ipAddress, String url){}
+
+    public RequestRecord extractRequest(String logLine) {
+        return new RequestRecord(extractIPAddress(logLine), extractURL(logLine));
     }
 
     public String extractIPAddress(String logLine) {
@@ -25,5 +32,12 @@ public class RequestService {
         String[] parts = logLine.split("GET "); //Assumption is data contains only GET requests and in this format
         String[] urlAndWords = parts[1].split(" "); // reading the part next to GET
         return urlAndWords[0]; // return first word after GET
+    }
+
+    public Request saveRequest(RequestRecord requestRecord) {
+        Request request = new Request();
+        request.setIpAddress(requestRecord.ipAddress);
+        request.setUrl(requestRecord.url);
+        return requestRepository.save(request);
     }
 }
