@@ -19,4 +19,17 @@ class RequestServiceTests {
 		Assertions.assertNotNull(requestService.extractRequest(requestLog));
 	}
 
+	@Test
+	void testIPAddressRegex() {
+		Assertions.assertEquals("177.71.128.21", requestService.extractIPAddress("177.71.128.21 - - [10/Jul/2018:22:21:28 +0200]"));
+		Assertions.assertEquals("50.112.00.11", requestService.extractIPAddress("50.112.00.11 - admin [11/Jul/2018:17:33:01 +0200]"));
+
+	}
+
+	@Test
+	void testExtractURL() {
+		String url = requestService.extractURL("177.71.128.21 - - [10/Jul/2018:22:21:28 +0200] \"GET /intranet-analytics/ HTTP/1.1\" 200 3574");
+		Assertions.assertEquals("/intranet-analytics/", url);
+	}
+
 }
