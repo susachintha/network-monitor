@@ -87,6 +87,18 @@ class RequestServiceTests {
 	}
 
 	@Test
+	void testSaveRequestsFromLog() {
+		requestService.saveRequestsFromLog("src/test/resources/programming-task-example-data.log");
+		List<AddressCount> mostUsedAddresses = requestService.findMostActiveIPAddresses(3L);
+		assertEquals("168.41.191.40", mostUsedAddresses.get(0).getAddress());
+		assertEquals(5, mostUsedAddresses.get(0).getCount());
+
+		List<UrlCount> topUrls = requestService.findMostVisitedUrls(3L);
+		assertEquals("/docs/manage-websites/", topUrls.get(0).getUrl());
+		assertEquals(3, topUrls.get(0).getCount());
+	}
+
+	@Test
 	void testLoadAndQuery() {
 
 		BufferedReader reader;

@@ -3,15 +3,21 @@ package com.group.mantel.assignment.networkmonitor;
 import com.group.mantel.assignment.networkmonitor.model.AddressCount;
 import com.group.mantel.assignment.networkmonitor.model.Request;
 import com.group.mantel.assignment.networkmonitor.model.UrlCount;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
 public class RequestService {
+    private static final Logger LOG = LoggerFactory.getLogger(RequestService.class);
 
     @Autowired
     RequestRepository requestRepository;
@@ -43,6 +49,24 @@ public class RequestService {
         request.setAddress(requestRecord.ipAddress);
         request.setUrl(requestRecord.url);
         return requestRepository.save(request);
+    }
+
+    public void saveRequestsFromLog(String filePath) {
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new FileReader(filePath));
+            String line = reader.readLine();
+
+            while (line != null) {
+                RequestService.RequestRecord requestRecord = extractRequest(line);
+                saveRequest(requestRecord);
+                // read next line
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException e) {
+            LOG.error("IO Exception occurred");
+        }
     }
 
     List<UrlCount> findMostVisitedUrls(Long numberOfTopUrls) {
